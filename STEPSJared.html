@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Stopwatch</title>
+<style>
+body {
+  font-family: Arial;
+  background-color: #0776de;
+}
+
+#stopwatch {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.time {
+  margin-left: -25px;
+}
+
+#stopwatch span {
+  font-size: 22px;
+}
+
+#stopwatch button {
+  font-size: 22px;
+  -webkit-appearance: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  width: 220px;
+  height: 145px;
+  margin-bottom: 10px;
+}
+
+#start-blue {
+  background-color: blue;
+}
+
+#start-red {
+  background-color: red;
+}
+
+#start-green {
+  background-color: green;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #000;
+  border: 1px solid #fff;
+  margin-bottom: 10px;
+}
+
+.progress-bar .progress {
+  width: 0%;
+  height: 100%;
+  transform: translateY(-60px);
+  background-color: #fff;
+}
+
+.progress-bar .progressgreen {
+  width: 10%;
+  height: 100%;
+  background-color: green;
+  left: 30%;
+  transform: translateY(0px);
+  position: relative;
+}
+
+.progress-bar .progressblue {
+  width: 10%;
+  height: 100%;
+  background-color: #00bfff;
+  left: 40%;
+  transform: translateY(-20px);
+  position: relative;
+}
+
+.progress-bar .progressred {
+  width: 20%;
+  height: 100%;
+  background-color: red;
+  left: 60%;
+  transform: translateY(-40px);
+  position: relative;
+}
+
+#reset{
+    display: none;
+    background-color: black;
+}
+</style>
+</head>
+<body>
+<div id="stopwatch">
+  <div class="progress-bar">
+    <div class="progressgreen"></div>
+    <div class="progressblue"></div>
+    <div class="progressred"></div>
+    <div class="progress"></div>
+  </div>
+  <div class="time">
+    <span id="minutes"></span> :
+    <span id="seconds"></span> :
+    <span id="milliseconds"></span>
+  </div>
+  <button id="start-green">Start (15-20 seconds)</button>
+  <button id="start-blue">Start (20-25 seconds)</button>
+  <button id="start-red">Start (30-40 seconds)</button>
+  <button id="reset">Reset</button>
+  
+</div>
+<script>
+var timer = 0;
+var milliseconds = 0;
+var hours = 0;
+var minutes = 0;
+var seconds = 0;
+
+function updateTime() {
+  milliseconds++;
+  timer++;
+
+  if (milliseconds >= 100) {
+    milliseconds = 0;
+    seconds++;
+
+    if (seconds >= 60) {
+      seconds = 0;
+      minutes++;
+    }
+  }
+
+  document.getElementById("milliseconds").innerHTML = milliseconds;
+  document.getElementById("seconds").innerHTML = seconds;
+  document.getElementById("minutes").innerHTML = minutes;
+
+  // Update the progress bar
+  document.querySelector(".progress").style.width = (timer / 5000) * 100 + "%";
+}
+
+function start() {
+  timerInterval = setInterval(updateTime, 10);
+  // Hide the colored buttons
+  document.getElementById("start-blue").style.display = "none";
+  document.getElementById("start-red").style.display = "none";
+  document.getElementById("start-green").style.display = "none";
+  document.getElementById("reset").style.display = "block";
+}
+
+function reset() {
+  clearInterval(timerInterval);
+  checkTimer();
+
+  timer = 0;
+  milliseconds = 0;
+  hours = 0;
+  minutes = 0;
+  seconds = 0;
+
+  document.getElementById("milliseconds").innerHTML = milliseconds;
+  document.getElementById("seconds").innerHTML = seconds;
+  document.getElementById("minutes").innerHTML = minutes;
+  document.querySelector(".progress").style.width = "0%";
+
+  // Show the colored buttons again
+  document.getElementById("start-blue").style.display = "block";
+  document.getElementById("start-red").style.display = "block";
+  document.getElementById("start-green").style.display = "block";
+  document.getElementById("reset").style.display = "none";
+  
+}
+
+document.getElementById("start-green").onclick = function() {
+  start();
+  timerLimit = 1500;
+  timerLimit2 = 2000;
+};
+
+document.getElementById("start-blue").onclick = function() {
+  start();
+  timerLimit = 2000;
+  timerLimit2 = 2500;
+};
+
+document.getElementById("start-red").onclick = function() {
+  start();
+  timerLimit = 3000;
+  timerLimit2 = 4000;
+};
+
+
+document.getElementById("reset").onclick = reset;
+
+// This function will now be called when the button is clicked
+function checkTimer() {
+    console.log(seconds)
+  if (timer >= timerLimit && timer <= timerLimit2) {
+    alert("You made it!");
+  }
+  else{
+    alert("Nope!");
+  }
+}
+
+// setInterval(checkTimer, 1000);
+</script>
+</body>
+</html>
