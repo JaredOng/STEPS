@@ -5,20 +5,24 @@
 <style>
 body {
   font-family: Arial;
-  background-color: #0776de;
+  background-color: #581c99;
 }
 
 #stopwatch {
-  width: 300px;
-  margin: 0 auto;
+  width: 700px;
+  margin: 100px auto;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .time {
-  margin-left: -25px;
+    text-align: center;
+    font-size: 120px;
 }
 
 #stopwatch span {
-  font-size: 22px;
+  font-size: 120px;
 }
 
 #stopwatch button {
@@ -30,6 +34,7 @@ body {
   width: 220px;
   height: 145px;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 #start-blue {
@@ -46,7 +51,7 @@ body {
 
 .progress-bar {
   width: 100%;
-  height: 20px;
+  height: 50px;
   background-color: #000;
   border: 1px solid #fff;
   margin-bottom: 10px;
@@ -55,7 +60,7 @@ body {
 .progress-bar .progress {
   width: 0%;
   height: 100%;
-  transform: translateY(-60px);
+  transform: translateY(-150px);
   background-color: #fff;
 }
 
@@ -73,7 +78,7 @@ body {
   height: 100%;
   background-color: #00bfff;
   left: 40%;
-  transform: translateY(-20px);
+  transform: translateY(-50px);
   position: relative;
 }
 
@@ -82,8 +87,13 @@ body {
   height: 100%;
   background-color: red;
   left: 60%;
-  transform: translateY(-40px);
+  transform: translateY(-100px);
   position: relative;
+}
+
+.buttonz{
+    display: flex;
+    margin-top: 50px;
 }
 
 #reset{
@@ -94,21 +104,23 @@ body {
 </head>
 <body>
 <div id="stopwatch">
+  
+  <div class="time">
+    <span id="seconds"></span> :
+    <span id="milliseconds"></span>
+  </div>
   <div class="progress-bar">
     <div class="progressgreen"></div>
     <div class="progressblue"></div>
     <div class="progressred"></div>
     <div class="progress"></div>
   </div>
-  <div class="time">
-    <span id="minutes"></span> :
-    <span id="seconds"></span> :
-    <span id="milliseconds"></span>
+  <div class="buttonz">
+    <button id="start-green">Start Green (15-20 seconds)</button>
+    <button id="start-blue">Start Blue (20-25 seconds)</button>
+    <button id="start-red">Start Red (30-40 seconds)</button>
+    <button id="reset">Reset</button>
   </div>
-  <button id="start-green">Start (15-20 seconds)</button>
-  <button id="start-blue">Start (20-25 seconds)</button>
-  <button id="start-red">Start (30-40 seconds)</button>
-  <button id="reset">Reset</button>
   
 </div>
 <script>
@@ -125,28 +137,27 @@ function updateTime() {
   if (milliseconds >= 100) {
     milliseconds = 0;
     seconds++;
-
-    if (seconds >= 60) {
-      seconds = 0;
-      minutes++;
-    }
   }
 
   document.getElementById("milliseconds").innerHTML = milliseconds;
   document.getElementById("seconds").innerHTML = seconds;
-  document.getElementById("minutes").innerHTML = minutes;
 
   // Update the progress bar
   document.querySelector(".progress").style.width = (timer / 5000) * 100 + "%";
 }
 
-function start() {
+function start(classname) {
   timerInterval = setInterval(updateTime, 10);
   // Hide the colored buttons
   document.getElementById("start-blue").style.display = "none";
   document.getElementById("start-red").style.display = "none";
   document.getElementById("start-green").style.display = "none";
   document.getElementById("reset").style.display = "block";
+
+  document.getElementsByClassName("progressgreen")[0].style.visibility = "hidden";
+  document.getElementsByClassName("progressblue")[0].style.visibility = "hidden";
+  document.getElementsByClassName("progressred")[0].style.visibility = "hidden";
+  document.getElementsByClassName(classname)[0].style.visibility = "visible";
 }
 
 function reset() {
@@ -161,7 +172,6 @@ function reset() {
 
   document.getElementById("milliseconds").innerHTML = milliseconds;
   document.getElementById("seconds").innerHTML = seconds;
-  document.getElementById("minutes").innerHTML = minutes;
   document.querySelector(".progress").style.width = "0%";
 
   // Show the colored buttons again
@@ -169,23 +179,26 @@ function reset() {
   document.getElementById("start-red").style.display = "block";
   document.getElementById("start-green").style.display = "block";
   document.getElementById("reset").style.display = "none";
-  
+
+  document.getElementsByClassName("progressgreen")[0].style.visibility = "visible";
+  document.getElementsByClassName("progressblue")[0].style.visibility = "visible";
+  document.getElementsByClassName("progressred")[0].style.visibility = "visible";
 }
 
 document.getElementById("start-green").onclick = function() {
-  start();
+  start("progressgreen");
   timerLimit = 1500;
   timerLimit2 = 2000;
 };
 
 document.getElementById("start-blue").onclick = function() {
-  start();
+  start("progressblue");
   timerLimit = 2000;
   timerLimit2 = 2500;
 };
 
 document.getElementById("start-red").onclick = function() {
-  start();
+  start("progressred");
   timerLimit = 3000;
   timerLimit2 = 4000;
 };
